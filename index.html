@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ประวัติวันลอยกระทง</title>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--pg:#f3ead8;--tx:#2a1f3d;--ac:#c2410c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0b0e24;--tx:#f5ead0;--ac:#ffc857;color-scheme:dark}}
+:root[data-theme="dark"]{--pg:#0b0e24;--tx:#f5ead0;--ac:#ffc857;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--pg);color:var(--tx);font-family:Sarabun,"Noto Sans Thai",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:16px}
+h1{font-family:Mali,Sarabun,sans-serif;font-size:1.4rem;margin:0 0 10px}
+.stage{position:relative;aspect-ratio:16/9;background:#0b1030;border-radius:14px;overflow:hidden}
+svg{width:100%;height:100%;display:block}
+.sub{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(5,6,20,.72);color:#fff;font-size:clamp(.8rem,2.2vw,1.1rem);line-height:1.5;text-align:center}
+.ctl{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+button{font:inherit;background:var(--ac);color:#1b1030;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700}
+button:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
+.bar{flex:1;min-width:140px;height:8px;background:rgba(127,127,127,.3);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac)}
+.note{font-size:.85rem;opacity:.75;margin-top:8px}
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(5,6,20,.6);color:#fff;text-align:center;padding:16px}
+.cover b{font-family:Mali,sans-serif;font-size:clamp(1.2rem,4vw,2rem);color:#ffd166}
+.tw{animation:tw 3s ease-in-out infinite}@keyframes tw{50%{opacity:.2}}
+.bob{animation:bob 3s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-4px)}}
+.fk{animation:fk .5s ease-in-out infinite alternate}@keyframes fk{to{transform:scaleY(1.2);opacity:.8}}
+.wv{animation:wv 6s linear infinite}@keyframes wv{to{transform:translateX(-100px)}}
+.rise{animation:rise 9s ease-in infinite}@keyframes rise{from{transform:translateY(60px);opacity:0}20%{opacity:1}to{transform:translateY(-200px);opacity:0}}
+.drift{animation:dr 20s linear infinite}@keyframes dr{from{transform:translateX(-160px)}to{transform:translateX(900px)}}
+.mr{animation:mr 8s ease-out both}@keyframes mr{from{transform:translateY(160px)}}
+.bst{animation:bst 2.4s ease-out infinite}@keyframes bst{from{transform:scale(.1);opacity:1}to{transform:scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.tw,.bob,.fk,.wv,.rise,.drift,.mr,.bst{animation:none}}
+</style></head><body>
+<div class="wrap">
+<h1>ประวัติวันลอยกระทง จากอดีตถึง พ.ศ. 2569</h1>
+<div class="stage" id="stage"><svg id="svg" viewBox="0 0 800 450" role="img" aria-label="แอนิเมชัน 2 มิติ ประวัติวันลอยกระทง"></svg>
+<div class="sub" id="sub"></div>
+<div class="cover" id="cover"><b>ประวัติวันลอยกระทง</b><span>แอนิเมชัน 2 มิติ ความยาวประมาณ 3 นาที พร้อมเสียงบรรยายภาษาไทย</span><button id="start">▶ เริ่มเล่น</button></div></div>
+<div class="ctl"><button id="pp">หยุด</button><button id="rs">เล่นใหม่</button><button id="mu">ปิดเสียง</button><div class="bar"><i id="pg"></i></div><span id="tm">0:00 / 3:00</span></div>
+<div class="note" id="note">เสียงบรรยายใช้เสียงภาษาไทยของเบราว์เซอร์/อุปกรณ์ของคุณ หากต้องการเป็นไฟล์วิดีโอ ให้อัดหน้าจอขณะเล่น</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const stars=()=>{let s='';for(let k=0;k<45;k++)s+=`<circle class="tw" style="animation-delay:${(k%7)*.4}s" cx="${(k*137)%800}" cy="${(k*71)%230}" r="${1+k%3*.6}" fill="#fff"/>`;return s};
+const moon=(x,y,r,c='mr')=>`<g class="${c}"><circle cx="${x}" cy="${y}" r="${r*2}" fill="#ffe9a8" opacity=".15"/><circle cx="${x}" cy="${y}" r="${r}" fill="#fff3c4"/><circle cx="${x-r*.3}" cy="${y-r*.2}" r="${r*.22}" fill="#f0dc9a"/></g>`;
+const water=()=>{let d='M-100 335';for(let k=0;k<20;k++)d+='q25-8 50 0t50 0';return `<defs><linearGradient id="wg" x2="0" y2="1"><stop offset="0" stop-color="#17387a"/><stop offset="1" stop-color="#091636"/></linearGradient></defs><rect y="310" width="800" height="140" fill="url(#wg)"/><ellipse cx="600" cy="340" rx="60" ry="6" fill="#ffe9a8" opacity=".25"/><g class="wv"><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="2"/><path transform="translate(-40 45)" d="${d}" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2"/><path transform="translate(-20 90)" d="${d}" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2"/></g>`};
+const kr=(x,y,s=1,c='#ffd166',d=0)=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="bob" style="animation-delay:${d}s"><circle cy="-20" r="26" fill="#ffb347" opacity=".18"/><ellipse cy="6" rx="24" ry="7" fill="#5a8f3a"/><path d="M-18 4Q0-22 18 4Z" fill="${c}"/><path d="M-10 4Q0-14 10 4Z" fill="#ff8fab"/><rect x="-1.5" y="-18" width="3" height="14" fill="#fff"/><ellipse class="fk" cy="-22" rx="3" ry="6" fill="#ff9f1c" style="transform-box:fill-box;transform-origin:bottom"/></g></g>`;
+const person=(x,y,c='#1c1233',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><circle cy="-46" r="9"/><path d="M-12 0Q-12-34 0-36Q12-34 12 0Z"/></g>`;
+const chedi=(x,y,s=1,c='#e8b84a')=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><rect x="-40" y="-20" width="80" height="20"/><rect x="-30" y="-40" width="60" height="20"/><path d="M-22-40L0-130 22-40Z"/><rect x="-1.5" y="-152" width="3" height="24"/></g>`;
+const lant=(x,y,d)=>`<g class="rise" style="animation-delay:${d}s"><ellipse cx="${x}" cy="${y}" rx="20" ry="24" fill="#ffb347" opacity=".25"/><ellipse cx="${x}" cy="${y}" rx="10" ry="14" fill="#ffb347"/></g>`;
+const lants=n=>{let s='';for(let k=0;k<n;k++)s+=lant(60+k*(680/n)+(k%2)*20,300-(k%3)*20,k*1.1);return s};
+const barge=(x,y,d)=>`<g class="drift" style="animation-delay:${d}s"><g transform="translate(${x} ${y})"><path d="M-70 0Q-60 18-40 18H50Q70 18 80-10Q60 0-70 0Z" fill="#c1272d"/><rect x="-30" y="-24" width="60" height="24" fill="#ffd166"/><path d="M-36-24L0-48 36-24Z" fill="#e8b84a"/></g></g>`;
+const fire=(x,y,c,d)=>{let s='';for(let a=0;a<10;a++){const r=a*Math.PI/5;s+=`<line x1="${x}" y1="${y}" x2="${(x+Math.cos(r)*50).toFixed(0)}" y2="${(y+Math.sin(r)*50).toFixed(0)}" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`}return `<g class="bst" style="transform-origin:${x}px ${y}px;animation-delay:${d}s">${s}</g>`};
+const house=(x,y,c='#3a2a1f')=>`<g fill="${c}"><rect x="${x}" y="${y}" width="70" height="40"/><path d="M${x-8} ${y}L${x+35} ${y-30} ${x+78} ${y}Z"/><rect x="${x+8}" y="${y+40}" width="4" height="30"/><rect x="${x+58}" y="${y+40}" width="4" height="30"/><rect x="${x+28}" y="${y+12}" width="14" height="14" fill="#ffd166"/></g>`;
+const city=()=>{let s='';for(let k=0;k<14;k++){const h=60+(k*53)%110,x=k*58;s+=`<rect x="${x}" y="${310-h}" width="50" height="${h}" fill="#141a45"/>`;for(let j=0;j<h/20-1;j++)s+=`<rect x="${x+8}" y="${320-h+j*20}" width="8" height="8" fill="#ffd166" opacity=".7"/><rect x="${x+30}" y="${320-h+j*20}" width="8" height="8" fill="#ffd166" opacity=".5"/>`}return s};
+const txt=(t,x,y,sz,c='#ffd166')=>`<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz}" font-weight="700" fill="${c}" font-family="Mali,Sarabun,sans-serif">${t}</text>`;
+const krs=(xs,c)=>xs.map((x,k)=>kr(x,350+(k%3)*28,1.1-(k%3)*.1,c||['#ffd166','#fff','#ff8fab'][k%3],k*.5)).join('');
+const D=20;
+const S=[
+{sky:['#0b1030','#34226b'],t:'ทุกปีเมื่อพระจันทร์เต็มดวงในคืนเดือนสิบสอง ผู้คนทั่วประเทศไทยจะพากันลอยกระทง วันนี้เราจะย้อนเวลาไปดูเรื่องราวของประเพณีนี้ ตั้งแต่อดีตจนถึง พ.ศ. 2569',
+ draw:()=>stars()+moon(620,110,48)+water()+txt('ประวัติวันลอยกระทง',400,150,50)+txt('จากอดีตถึง พ.ศ. 2569',400,200,26,'#fff')+krs([150,300,450,560,690])},
+{sky:['#0a0e2a','#1f2a5c'],t:'ต้นกำเนิดของประเพณีนี้ มีผู้สันนิษฐานว่ามาจากพิธีบูชาแม่น้ำของชาวอินเดียโบราณ ที่ขอบคุณและขอขมาแม่น้ำ ซึ่งหล่อเลี้ยงชีวิตผู้คนมาแต่ครั้งดึกดำบรรพ์',
+ draw:()=>stars()+moon(160,90,40)+'<path d="M0 300Q200 280 330 310V310H0Z" fill="#1a1530"/>'+water()+person(80,315,'#0d0a1a',1.2)+person(130,318,'#0d0a1a',1)+person(250,322,'#0d0a1a',1.1)+krs([380,460,540,620,700],'#ffb347')+txt('ยุคโบราณ: บูชาแม่น้ำ',560,60,28)},
+{sky:['#10133a','#3a2a6a'],t:'เมื่อพุทธศาสนาแผ่เข้ามาในดินแดนสุวรรณภูมิ การลอยโคมและประทีป ก็ผสมผสานกับความเชื่อเรื่องการบูชารอยพระพุทธบาท ที่ริมฝั่งแม่น้ำนัมมทา',
+ draw:()=>stars()+moon(150,100,38)+'<path d="M470 310Q560 290 800 300V310Z" fill="#1a1530"/>'+chedi(640,305,1.3)+water()+person(430,318,'#0d0a1a')+person(480,322,'#0d0a1a',1.1)+krs([120,230,330,420],'#ffd166')+lants(5)+txt('พุทธศาสนา: รอยพระพุทธบาท',400,50,28)},
+{sky:['#0b1030','#40256b'],t:'ตำนานที่เล่าต่อกันมาว่า ในสมัยสุโขทัย นางนพมาศ สนมในราชสำนัก ประดิษฐ์กระทงเป็นรูปดอกบัวถวายพระร่วง แม้นักประวัติศาสตร์เห็นว่าเรื่องนี้เป็นตำนานที่แต่งขึ้นภายหลัง',
+ draw:()=>stars()+moon(130,90,40)+chedi(660,305,1.5,'#f5f0e0')+chedi(540,305,.9,'#f5f0e0')+water()+person(260,330,'#6b2d5c',1.5)+kr(400,370,3.2,'#ffd166')+txt('สุโขทัย: ตำนานนางนพมาศ',400,55,30)},
+{sky:['#150b2e','#4a1f5c'],t:'ในสมัยอยุธยา พระราชพิธีจองเปรียงยิ่งใหญ่อลังการ มีการจุดประทีป ชักโคม ลอยโคม และขบวนเรือพระราชพิธีล่องไปตามลำน้ำเจ้าพระยา',
+ draw:()=>stars()+moon(650,90,36)+chedi(120,305,1.4,'#c9a24a')+fire(300,110,'#ff6b6b',0)+fire(500,80,'#ffd166',1.2)+fire(420,150,'#7bdff2',.6)+water()+barge(100,345,0)+barge(100,385,6)+lants(7)+txt('อยุธยา: พระราชพิธีจองเปรียง',400,45,28)},
+{sky:['#0b1030','#2c2467'],t:'เข้าสู่สมัยรัตนโกสินทร์ ชาวบ้านนิยมทำกระทงจากใบตองและต้นกล้วย บรรจุธูปเทียนและดอกไม้ ประเพณีจึงแพร่หลายจากราชสำนักสู่ประชาชนทั่วไป',
+ draw:()=>stars()+moon(400,80,34)+house(40,260)+house(680,260)+water()+person(150,330,'#0d0a1a',1.1)+person(200,332,'#3b2a5c',1)+krs([300,380,460,540,620,250,520],'#ffd166')+txt('รัตนโกสินทร์: กระทงใบตอง',400,40,28)},
+{sky:['#0a0820','#3b1d5a'],t:'ในยุคสมัยใหม่ กระทงถูกทำจากโฟมและวัสดุต่างๆ ขณะที่ราว พ.ศ. 2520 มีการจัดเทศกาลลอยกระทงที่อุทยานประวัติศาสตร์สุโขทัยอย่างยิ่งใหญ่ ดึงดูดผู้คนจากทั่วโลก',
+ draw:()=>stars()+moon(700,70,30)+chedi(150,305,1.4,'#e8d9a0')+fire(300,100,'#ff6b6b',0)+fire(450,70,'#ffd166',.8)+fire(600,130,'#c77dff',1.6)+water()+krs([200,290,380,470,560,650,330],'#fff')+person(60,330,'#0d0a1a')+txt('พ.ศ. 2520: เทศกาลสุโขทัย',400,45,28)},
+{sky:['#0a1030','#143a5c'],t:'จนถึงปัจจุบัน พ.ศ. 2569 เราใส่ใจสิ่งแวดล้อมมากขึ้น ใช้กระทงจากวัสดุธรรมชาติที่ย่อยสลายได้ บางคนลอยกระทงออนไลน์ผ่านโทรศัพท์ แต่ความหมายของการขอบคุณสายน้ำยังคงอยู่',
+ draw:()=>stars()+moon(700,70,30)+city()+water()+krs([160,260,360,470,570],'#8bc34a')+'<g transform="translate(680 300)"><rect width="70" height="120" rx="10" fill="#111"/><rect x="5" y="8" width="60" height="104" rx="6" fill="#143a5c"/></g>'+kr(715,375,1.3,'#ffd166')+txt('พ.ศ. 2569: ลอยกระทงรักษ์โลก',400,45,28)},
+{sky:['#0b1030','#34226b'],t:'ลอยกระทงจึงไม่ใช่แค่ความสวยงาม แต่คือการขอบคุณ ขอขมา และส่งต่อความหวัง ขอให้ทุกความทุกข์ลอยไปกับสายน้ำ สุขสันต์วันลอยกระทงค่ะ',
+ draw:()=>stars()+moon(400,120,70)+lants(9)+water()+krs([90,190,290,390,490,590,690,240,540],'')+txt('สุขสันต์วันลอยกระทง',400,250,48)}
+];
+const total=S.length*D;let cur=0,tok=0,playing=false,mute=false,tick=null,t0=0,voice=null;
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>/^th/i.test(x.lang))||null;if(!voice)$('note').textContent='อุปกรณ์นี้ไม่พบเสียงภาษาไทย จึงแสดงภาพและคำบรรยายอย่างเดียว หากต้องการเสียง ลองเปิดด้วย Chrome, Edge หรือ Safari บนอุปกรณ์ที่ติดตั้งเสียงไทย'}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function render(n){const s=S[n];$('svg').innerHTML=`<defs><linearGradient id="sg" x2="0" y2="1"><stop offset="0" stop-color="${s.sky[0]}"/><stop offset="1" stop-color="${s.sky[1]}"/></linearGradient></defs><rect width="800" height="450" fill="url(#sg)"/>`+s.draw();$('sub').textContent=s.t}
+function play(n){
+  if(n>=S.length){playing=false;$('pp').textContent='เล่นต่อ';cur=0;return}
+  cur=n;const my=++tok;render(n);t0=Date.now();let tDone=false,sDone=true;
+  const chk=()=>{if(my===tok&&tDone&&sDone)play(n+1)};
+  setTimeout(()=>{tDone=true;chk()},D*1000);
+  if('speechSynthesis' in window){speechSynthesis.cancel();
+    if(!mute&&voice){sDone=false;const u=new SpeechSynthesisUtterance(S[n].t);u.lang='th-TH';u.voice=voice;u.rate=.95;u.onend=u.onerror=()=>{sDone=true;chk()};speechSynthesis.speak(u)}}
+}
+function stop(){tok++;if('speechSynthesis' in window)speechSynthesis.cancel()}
+setInterval(()=>{if(!playing)return;const e=Math.min(total,cur*D+Math.min(D,(Date.now()-t0)/1000));$('pg').style.width=e/total*100+'%';$('tm').textContent=fmt(e)+' / '+fmt(total)},250);
+$('start').onclick=()=>{$('cover').style.display='none';playing=true;$('pp').textContent='หยุด';play(0)};
+$('pp').onclick=()=>{if(playing){playing=false;stop();$('pp').textContent='เล่นต่อ'}else{playing=true;$('cover').style.display='none';$('pp').textContent='หยุด';play(cur)}};
+$('rs').onclick=()=>{stop();$('cover').style.display='none';playing=true;$('pp').textContent='หยุด';play(0)};
+$('mu').onclick=()=>{mute=!mute;$('mu').textContent=mute?'เปิดเสียง':'ปิดเสียง';if(mute&&'speechSynthesis' in window)speechSynthesis.cancel()};
+render(0);
+</script></body></html>
